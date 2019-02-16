@@ -15,7 +15,7 @@ def points_by_group(request, groupId):
     logger.debug("Send for group_id = {}".format(group_id))
     if request.method == 'GET':
         data = {
-            "points":
+            "points":[
                 {
                     "id": "1",
                     "latitude": 54.697929,
@@ -25,7 +25,18 @@ def points_by_group(request, groupId):
                     "category": "1",
                     "description": "Some description right here",
                     "photoUrl": "https://saffakfnla/img.png"
-                }
+                },
+                {
+                    "id": "2",
+                    "latitude": 51.697929,
+                    "longitude": 22.533874,
+                    "status": "3",
+                    "group": "3",
+                    "category": "4",
+                    "description": "Some description right here",
+                    "photoUrl": "https://saffakfnla/img.png"
+                },
+                ]
         }
 
         return HttpResponse(json.dumps(data))
