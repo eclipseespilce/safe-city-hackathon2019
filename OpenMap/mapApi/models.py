@@ -28,9 +28,9 @@ class Status(models.Model):
 class MapPoint(models.Model):
     description = models.TextField()
     image_url = models.CharField(max_length=100, blank=False, default='')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='+')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='+')
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='+')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='map_points')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='map_points')
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='map_points')
     latitude = models.FloatField()
     longitude = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)

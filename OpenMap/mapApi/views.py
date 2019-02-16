@@ -1,74 +1,43 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-import json
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.parsers import JSONParser, FormParser
+
 import logging
 
+from mapApi.models import Group, MapPoint
+from mapApi.serializers import GroupSerializer, MapPointSerializer
 
 logger = logging.getLogger(__name__)
 
 
-@csrf_exempt
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
 def points_by_group(request, groupId):
-    group_id = int(groupId)
-    logger.debug("Send for group_id = {}".format(group_id))
-    if request.method == 'GET':
-        data = {
-            "points":[
-                {
-                    "id": "1",
-                    "latitude": 54.697929,
-                    "longitude": 20.533874,
-                    "status": "1",
-                    "group": "1",
-                    "category": "1",
-                    "description": "Some description right here",
-                    "photoUrl": "https://saffakfnla/img.png"
-                },
-                {
-                    "id": "2",
-                    "latitude": 51.697929,
-                    "longitude": 22.533874,
-                    "status": "3",
-                    "group": "3",
-                    "category": "4",
-                    "description": "Some description right here",
-                    "photoUrl": "https://saffakfnla/img.png"
-                },
-                ]
-        }
-
-        return HttpResponse(json.dumps(data))
+    map_points = MapPoint.objects.filter(group__pk=groupId).all()
+    serializer = MapPointSerializer(map_points, many=True)
+    data = {"points": serializer.data}
+    return Response(data)
 
 
-@csrf_exempt
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
 def groups_list(request):
-    if request.method == 'GET':
-        data = {
-            "groups": [
-                {
-                    "id": "1",
-                    "name": "Trashes"
-                },
-                {
-                    "id": "2",
-                    "name": "Toilets"
-                },
-                {
-                    "id": "3",
-                    "name": "Green things"
-                },
-            ]
-        }
-
-        return HttpResponse(json.dumps(data))
+    groups = Group.objects.all()
+    serializer = GroupSerializer(groups, many=True)
+    data = {'groups': serializer.data}
+    return Response(data)
 
 
-@csrf_exempt
+@api_view(['POST'])
+@renderer_classes((JSONRenderer, FormParser))
 def add_point(request):
-    if request.method == 'POST':
-        for key in request.POST:
-            logger.debug("{}: {}".format(key, request.POST[key]))
-
-        return HttpResponse("Received")
+    data = JSONParser().parse(request)
+    serializer = MapPointSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
