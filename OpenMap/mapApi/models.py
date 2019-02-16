@@ -3,20 +3,37 @@ from django.db import models
 
 class Group(models.Model):
     name = models.CharField(max_length=100, blank=False)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, blank=False)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class Status(models.Model):
+    name = models.CharField(max_length=100, blank=False)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class MapPoint(models.Model):
-    """
-    id: long;
-	latitude: number;
-	longitude: number;
-	status: string;
-	group: string;
-	category: string;
-	description: string;
-	photoUrl: string;
-    """
-    created = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     image_url = models.CharField(max_length=100, blank=False, default='')
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='+')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='+')
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='+')
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}".format(self.description)
