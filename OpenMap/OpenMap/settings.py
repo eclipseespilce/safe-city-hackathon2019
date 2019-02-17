@@ -123,7 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join (BASE_DIR, 'static')
 
-FILE_UPLOAD_PERMISSIONS = 0o777
+FILE_UPLOAD_PERMISSIONS = 0o755
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 

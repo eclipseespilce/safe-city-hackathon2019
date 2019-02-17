@@ -66,11 +66,29 @@ def get_request_root_url(request):
 @api_view(['POST'])
 def upload_image(request):
     filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-    filepath = '{}{}.jpeg'.format('/media/', filename)
+    filepath = '{}{}.jpeg'.format('media/', filename)
     with open(filepath,'wb+') as destination:
         for key, value in request.POST.items():
-            destination.write(bytes(key, 'utf-8'))
+            #destination.write(bytes(key, 'utf-8'))
+            destination.write(key)
 
-    url = '{}{}'.format(get_request_root_url(request), filepath)
+    url = '{}/{}'.format(get_request_root_url(request), filepath)
     return Response({'url': url},status=201)
+
+
+class FileUploadView(APIView):
+    parser_classes = (MultiPartParser,)
+
+    def put(self,request, format = None):
+        file_obj = request.FILES['file']
+        file_obj.seek(0)
+        data = file_obj.read()
+
+        filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
+        filepath = '{}{}.jpeg'.format('media/', filename)
+        with open(filepath,'wb+') as destination:
+            destination.write(data)
+
+        url = '{}/{}'.format(get_request_root_url(request), filepath)
+        return Response({'url': url},status=201)
 
