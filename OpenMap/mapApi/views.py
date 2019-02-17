@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
+from rest_framework.parsers import JSONParser, FormParser, FileUploadParser, MultiPartParser
 
 import logging
 import random
@@ -62,35 +62,13 @@ def get_request_root_url(request):
     site = get_current_site(request)
     return '%s://%s' % (scheme, site)
 
-
 @api_view(['POST'])
-@renderer_classes((JSONParser, FormParser))
 def upload_image(request):
-    data = JSONParser().parse(request)
     filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-    filepath = '{}{}'.format('/media/', filename)
-    with open(filename,'wb+') as destination:
-        destination.write(data['image'])
+    filepath = '{}{}.jpeg'.format('/media/', filename)
+    with open(filepath,'wb+') as destination:
+        for key, value in request.POST.items():
+            destination.write(bytes(key, 'utf-8'))
 
     url = '{}{}'.format(get_request_root_url(request), filepath)
     return Response({'url': url},status=201)
-
-
-# class FileUploadView(APIView):
-#     parser_classes = (FileUploadParser,)
-#
-#     def post(self, request, filename, format=None):
-#         file_obj = request.data['file']
-#
-#         filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-#         filepath = '{}{}'.format('media/', filename)
-#         with open(filename,'wb+') as destination:
-#             destination.write(file_obj)
-#
-#         url = '{}{}'.format(self.get_request_root_url(), filepath)
-#         return Response({'url': url},status=201)
-#
-    def get_request_root_url(self):
-        scheme = 'https' if self.request.is_secure() else 'http'
-        site = get_current_site(self.request)
-        return '%s://%s' % (scheme, site)

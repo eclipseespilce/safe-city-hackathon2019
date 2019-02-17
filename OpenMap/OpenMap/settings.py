@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['178.128.91.191', '127.0.0.1']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'mapApi.apps.MapapiConfig',
     "rest_framework_swagger"
@@ -121,8 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join (BASE_DIR, 'static')
 
-FILE_UPLOAD_PERMISSIONS = 0o744
+FILE_UPLOAD_PERMISSIONS = 0o777
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
