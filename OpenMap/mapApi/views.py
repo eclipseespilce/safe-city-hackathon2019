@@ -62,6 +62,7 @@ def get_request_root_url(request):
     site = get_current_site(request)
     return '%s://%s' % (scheme, site)
 
+
 @api_view(['POST'])
 def upload_image(request):
     filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
@@ -72,3 +73,4 @@ def upload_image(request):
 
     url = '{}{}'.format(get_request_root_url(request), filepath)
     return Response({'url': url},status=201)
+
