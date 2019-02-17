@@ -80,6 +80,7 @@ def get_request_root_url(request):
 
 
 class FileUploadView(APIView):
+    # TODO: Kludge. Delete after front-end will start use another service to load image.
     parser_classes = (MultiPartParser,)
 
     def put(self,request, format = None):
