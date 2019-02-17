@@ -12,8 +12,8 @@ import logging
 import random
 import string
 
-from mapApi.models import Group, MapPoint, Category
-from mapApi.serializers import GroupSerializer, MapPointSerializer, CategorySerializer
+from mapApi.models import Group, MapPoint, Category, Status
+from mapApi.serializers import GroupSerializer, MapPointSerializer, CategorySerializer, StatusSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +51,15 @@ def groups_list(request):
     serializer = GroupSerializer(groups,context={'request':request}, many=True)
     data = {'groups': serializer.data}
     return Response(data)
+
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
+def statuses_list(request):
+    statuses = Status.objects.all()
+    serializer = StatusSerializer(statuses, context={'request':request}, many=True)
+    data = {'statuses': serializer.data}
+    return Response(data)
+
 
 
 @api_view(['POST'])

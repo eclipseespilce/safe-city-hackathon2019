@@ -42,6 +42,14 @@ class CategorySerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
+class StatusSerializer(serializers.ModelSerializer):
+    id = IntToStringField()
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'description')
+        read_only_fields = ('id',)
+
+
 class GroupSerializer(serializers.ModelSerializer):
     photoUrl = serializers.SerializerMethodField()
     id = IntToStringField()
@@ -66,5 +74,5 @@ class MapPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapPoint
         fields = ('id', 'description', 'photoUrl', 'group', 'category',
-                  'status', 'latitude', 'longitude')
+                  'status', 'latitude', 'longitude', 'json')
         read_only_fields = ('id',)
