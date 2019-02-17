@@ -58,7 +58,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class MapPointSerializer(serializers.ModelSerializer):
     id = IntToStringField(required=False)
-    photoUrl = serializers.CharField(source='image_url')
+    photoUrl = serializers.CharField(source='image_url', required=False)
     group = GroupRelatedField(queryset=Group.objects.all())
     category = CategoryRelatedField(queryset=Category.objects.all())
     status = StatusRelatedField(queryset=Status.objects.all())

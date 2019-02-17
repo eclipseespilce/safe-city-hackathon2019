@@ -64,7 +64,6 @@ def add_point(request):
     return Response(serializer.errors, status=400)
 
 
-
 def get_request_root_url(request):
     scheme = 'https' if request.is_secure() else 'http'
     site = get_current_site(request)
@@ -86,4 +85,3 @@ class FileUploadView(APIView):
 
         url = '{}/{}'.format(get_request_root_url(request), filepath)
         return Response({'url': url},status=201)
-
