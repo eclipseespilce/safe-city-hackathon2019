@@ -34,6 +34,14 @@ class IntToStringField(serializers.IntegerField):
         return int(str_id)
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    id = IntToStringField()
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'description')
+        read_only_fields = ('id',)
+
+
 class GroupSerializer(serializers.ModelSerializer):
     photoUrl = serializers.SerializerMethodField()
     id = IntToStringField()

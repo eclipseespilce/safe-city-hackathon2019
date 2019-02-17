@@ -12,8 +12,8 @@ import logging
 import random
 import string
 
-from mapApi.models import Group, MapPoint
-from mapApi.serializers import GroupSerializer, MapPointSerializer
+from mapApi.models import Group, MapPoint, Category
+from mapApi.serializers import GroupSerializer, MapPointSerializer, CategorySerializer
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,14 @@ def all_points(request):
     map_points = MapPoint.objects.all()
     serializer = MapPointSerializer(map_points, many=True)
     data = {"points": serializer.data}
+    return Response(data)
+
+@api_view(['GET'])
+@renderer_classes((JSONRenderer,))
+def categories_list(request):
+    map_points = Category.objects.all()
+    serializer = CategorySerializer(map_points, many=True)
+    data = {"categories": serializer.data}
     return Response(data)
 
 
