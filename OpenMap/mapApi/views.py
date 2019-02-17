@@ -56,27 +56,40 @@ def add_point(request):
     return Response(serializer.errors, status=400)
 
 
+
+def get_request_root_url(request):
+    scheme = 'https' if request.is_secure() else 'http'
+    site = get_current_site(request)
+    return '%s://%s' % (scheme, site)
+
+
 @api_view(['POST'])
-@renderer_classes((FileUploadParser,))
+@renderer_classes((JSONParser,))
 def upload_image(request):
-    uploaded_image = FileUploadParser().parse(request.FILES)
-    return Response("Received")
+    data = JSONParser().parse(request)
+    filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
+    filepath = '{}{}'.format('/media/', filename)
+    with open(filename,'wb+') as destination:
+        destination.write(data['image'])
+
+    url = '{}{}'.format(get_request_root_url(request), filepath)
+    return Response({'url': url},status=201)
 
 
-class FileUploadView(APIView):
-    parser_classes = (FileUploadParser,)
-
-    def post(self, request, filename, format=None):
-        file_obj = request.data['file']
-
-        filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-        filepath = '{}{}'.format('media/', filename)
-        with open(filename,'wb+') as destination:
-            destination.write(file_obj)
-
-        url = '{}{}{}'.format(self.get_request_root_url(), filepath)
-        return Response({'url': url},status=201)
-
+# class FileUploadView(APIView):
+#     parser_classes = (FileUploadParser,)
+#
+#     def post(self, request, filename, format=None):
+#         file_obj = request.data['file']
+#
+#         filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
+#         filepath = '{}{}'.format('media/', filename)
+#         with open(filename,'wb+') as destination:
+#             destination.write(file_obj)
+#
+#         url = '{}{}'.format(self.get_request_root_url(), filepath)
+#         return Response({'url': url},status=201)
+#
     def get_request_root_url(self):
         scheme = 'https' if self.request.is_secure() else 'http'
         site = get_current_site(self.request)
