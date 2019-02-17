@@ -64,7 +64,7 @@ def get_request_root_url(request):
 
 
 @api_view(['POST'])
-@renderer_classes((JSONParser,))
+@renderer_classes((JSONParser, FormParser))
 def upload_image(request):
     data = JSONParser().parse(request)
     filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
