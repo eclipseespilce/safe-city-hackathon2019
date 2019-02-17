@@ -35,11 +35,17 @@ class IntToStringField(serializers.IntegerField):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    photoUrl = serializers.SerializerMethodField()
     id = IntToStringField()
     class Meta:
         model = Group
-        fields = ('id', 'name', 'description')
+        fields = ('id', 'name', 'description', 'photoUrl')
         read_only_fields = ('id',)
+
+    def get_photoUrl(self, group):
+        request = self.context.get('request')
+        photo_url = group.image.url
+        return request.build_absolute_uri(photo_url)
 
 
 class MapPointSerializer(serializers.ModelSerializer):

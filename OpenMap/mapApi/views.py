@@ -40,7 +40,7 @@ def all_points(request):
 @renderer_classes((JSONRenderer,))
 def groups_list(request):
     groups = Group.objects.all()
-    serializer = GroupSerializer(groups, many=True)
+    serializer = GroupSerializer(groups,context={'request':request}, many=True)
     data = {'groups': serializer.data}
     return Response(data)
 
@@ -63,19 +63,6 @@ def get_request_root_url(request):
     return '%s://%s' % (scheme, site)
 
 
-@api_view(['POST'])
-def upload_image(request):
-    filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-    filepath = '{}{}.jpeg'.format('media/', filename)
-    with open(filepath,'wb+') as destination:
-        for key, value in request.POST.items():
-            #destination.write(bytes(key, 'utf-8'))
-            destination.write(key)
-
-    url = '{}/{}'.format(get_request_root_url(request), filepath)
-    return Response({'url': url},status=201)
-
-
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser,)
 
@@ -85,7 +72,7 @@ class FileUploadView(APIView):
         data = file_obj.read()
 
         filename = ''.join([random.choice(string.ascii_lowercase) for i in range(30)])
-        filepath = '{}{}.jpeg'.format('media/', filename)
+        filepath = '{}{}.jpeg'.format('media/problems_images/', filename)
         with open(filepath,'wb+') as destination:
             destination.write(data)
 
