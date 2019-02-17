@@ -23,5 +23,5 @@ schema_view = get_swagger_view(title='Open Data Maps API', url="api/")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mapApi.urls')),
-    url('api/', schema_view)
+    url('api/swagger/', schema_view)
 ]
