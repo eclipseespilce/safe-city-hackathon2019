@@ -74,5 +74,5 @@ class MapPointSerializer(serializers.ModelSerializer):
     class Meta:
         model = MapPoint
         fields = ('id', 'description', 'photoUrl', 'group', 'category',
-                  'status', 'latitude', 'longitude', 'json')
+                  'status', 'latitude', 'longitude')
         read_only_fields = ('id',)
