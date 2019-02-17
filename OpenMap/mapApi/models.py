@@ -50,6 +50,7 @@ class MapPoint(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
+    json = models.TextField(blank=True, default="")
 
     def __str__(self):
         return "{}".format(self.description)
