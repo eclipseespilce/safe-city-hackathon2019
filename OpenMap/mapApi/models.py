@@ -17,6 +17,9 @@ class PathAndRenameCompetition(object):
 
 
 class Group(models.Model):
+    """
+    Used to classify type of problems (garbage, trees, etc)
+    """
     name = models.CharField(max_length=100, blank=False)
     description = models.TextField()
     image = models.ImageField(upload_to=PathAndRenameCompetition("group-images/"), max_length=500)
@@ -26,6 +29,9 @@ class Group(models.Model):
 
 
 class Category(models.Model):
+    """
+    Used to classify side of problem (positive, negative, etc)
+    """
     name = models.CharField(max_length=100, blank=False)
     description = models.TextField()
 
@@ -34,6 +40,9 @@ class Category(models.Model):
 
 
 class Status(models.Model):
+    """
+    Used to set status of current problem (received, in progress, etc)
+    """
     name = models.CharField(max_length=100, blank=False)
     description = models.TextField()
 
@@ -50,7 +59,7 @@ class MapPoint(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     created = models.DateTimeField(auto_now_add=True)
-    json = models.TextField(blank=True, default="")
+    json = models.TextField(blank=True, default="")  # using for additional data
 
     def __str__(self):
         return "{}".format(self.description)
